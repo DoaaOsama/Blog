@@ -32,6 +32,7 @@ class AddUser extends Component {
             // },
             errors: []
         };
+        const emailRegex = new RegExp('/\S+@\S+\.\S+/');
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -44,11 +45,21 @@ class AddUser extends Component {
                 optional: false,
                 min: 0
             },
-
+            name:{
+                type: String,
+                optional: false,
+            },
+            username:{
+                type: String,
+                optional: false,
+            },
+            email:{
+                isValid: this.emailRegex.test(email),
+            }
         }).newContext();
-        validationContext.validate({ id: +id });
+        validationContext.validate({ id: +id, name,  });
         if (validationContext.isValid()) {
-            axios.post('https://jsonplaceholder.typicode.com/users', { id: +id, name, username, email, address: { street, suite, city, zipcode, geo: { lat, lng } }, phone, website })
+            axios.post('https://jsonplaceholder.typicode.com/users', { id: +id, name, username, email, address: ({ street, suite, city, zipcode, geo: { lat, lng } }), phone, website })
                 .then((response) => {
                     // handle success
                     console.log(response);
